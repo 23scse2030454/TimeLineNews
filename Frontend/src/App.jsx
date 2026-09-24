@@ -6,10 +6,13 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetching data from Node.js backend API
-    axios.get('http://localhost:5000/api/news')
+    // Vercel के Environment Variable से URL उठाएगा, नहीं तो लोकलहोस्ट पर चलेगा
+    const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    
+    // '/api/news' एंडपॉइंट से लाइव न्यूज़ फ़ेच करना
+    axios.get(`${API_BASE_URL}/api/news`)
       .then((response) => {
-        setNewsList(response.data.news || []);
+        setNewsList(response.data.news || response.data || []);
         setLoading(false);
       })
       .catch((error) => {
